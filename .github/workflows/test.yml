@@ -29,5 +29,6 @@ jobs:
 
       - name: Set up docker image and load to kind
         run: |
-          sh ./scripts/image.sh
+          sh  ./scripts/image.sh
+          docker images
           kind load docker-image http-echo:local --name kind            
