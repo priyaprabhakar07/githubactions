@@ -25,9 +25,9 @@ jobs:
       - name: Create Kubernetes Cluster
         run: |
           kind create cluster --config kind-cluster.yaml
-          
-      # - name: Set up docker image
-      #   run: |
-      #     sh ./scripts/image.sh
-      #     kind load docker-image http-echo:local --name kind   
-      #     kubectl get nodes             
+          kubectl get nodes
+
+      - name: Set up docker image and load to kind
+        run: |
+          sh ./scripts/image.sh
+          kind load docker-image http-echo:local --name kind            
