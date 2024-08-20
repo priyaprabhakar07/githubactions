@@ -45,8 +45,6 @@ jobs:
           kubectl apply -f ./deployment/bar-deployment.yaml
           kubectl apply -f ./services/foo-service.yaml
           kubectl apply -f ./services/bar-service.yaml
-          kubectl rollout status deployment/bar-deployment
-          kubectl rollout status deployment/foo-deployment
           kubectl get pods
           kubectl get svc
       
