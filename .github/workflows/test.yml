@@ -1,0 +1,11 @@
+name: Test Project
+
+on: push
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: test workflow job
+        run: echo This is a start workflow
