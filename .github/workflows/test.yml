@@ -32,3 +32,32 @@ jobs:
           sh  ./scripts/image.sh
           docker images
           kind load docker-image http-echo:local --name kind            
+      
+      - name: Deploying Nginix Ingress Controller
+        run: |
+          helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+          helm repo update
+          helm install ingress-nginx ingress-nginx/ingress-nginx --namespace ingress-nginx --create-namespace
+      
+      - name: Deploying Ingress Service
+        run: | 
+          kubectl apply -f ./ingress/ingress.yaml
+          kubectl get pods -n ingress-nginx
+          kubectl get services -n ingress-nginx
+
+      - name: Deploying Foo/Bar Services
+        run: |
+          kubectl apply -f ./deployment/foo-deployment.yaml
+          kubectl apply -f ./deployment/bar-deployment.yaml
+          kubectl apply -f ./services/foo-service.yaml
+          kubectl apply -f ./services/bar-service.yaml
+          kubectl rollout status deployment/bar-deployment
+          kubectl rollout status deployment/foo-deployment
+          kubectl get pods
+          kubectl get svc
+
+      
+     
+
+  
+       
