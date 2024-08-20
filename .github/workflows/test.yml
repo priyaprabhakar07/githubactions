@@ -1,4 +1,4 @@
-name: Test Project
+name: Kind kubernetes Project
 
 on: push
 
@@ -7,5 +7,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: test workflow job
-        run: echo This is a start workflow
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: '1.21'
+      - name: Set up KinD
+        uses: kind-action@v1
+        with:
+          version: '1.26.0'
+      - name: Set up docker image
+        run: |
+          sh ./scripts/image.sh
+      - name: Create Kubernetes Cluster
+        run: |
+          kind create cluster --config kind-cluster.yaml
+          kind load docker-image http-echo:local --name kind   
+          kubectl get nodes             
