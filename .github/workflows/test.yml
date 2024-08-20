@@ -17,11 +17,11 @@ jobs:
         uses: kind-action@v1
         with:
           version: '1.26.0'
-      - name: Set up docker image
-        run: |
-          sh ./scripts/image.sh
-      - name: Create Kubernetes Cluster
-        run: |
-          kind create cluster --config kind-cluster.yaml
-          kind load docker-image http-echo:local --name kind   
-          kubectl get nodes             
+      # - name: Set up docker image
+      #   run: |
+      #     sh ./scripts/image.sh
+      # - name: Create Kubernetes Cluster
+      #   run: |
+      #     kind create cluster --config kind-cluster.yaml
+      #     kind load docker-image http-echo:local --name kind   
+      #     kubectl get nodes             
