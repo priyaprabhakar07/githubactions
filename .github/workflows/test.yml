@@ -109,16 +109,16 @@ jobs:
       #     ./hey_linux_amd64 -z 30s -c 10 http://foo.localhost
       - name: Download k6 binary
         run: |
-          curl -sL https://dl.k6.io/releases/k6-v0.37.1-linux-amd64.tar.gz -o k6.tar.gz
+          curl -sL https://github.com/k6io/k6/releases/download/v0.37.1/k6-v0.37.1-linux-amd64.deb -o k6.deb
 
       - name: Verify file
         run: |
           file k6.tar.gz
 
-      - name: Extract k6 binary
+      - name: Install k6 binary
         run: |
-          tar -xzf k6.tar.gz
-          sudo mv k6-v0.37.1-linux-amd64/k6 /usr/local/bin/
+          sudo apt-get update
+          sudo apt-get install -y ./k6.deb
 
       - name: Run load test
         run: |
