@@ -92,7 +92,7 @@ jobs:
           kubectl port-forward service/foo-service 8080:80 &
           kubectl port-forward service/bar-service 8081:80 &
           sleep 10
-          k6 run --vus 50 --duration 1m ./scripts/load-test.js
+          k6 run --vus 50 --duration 1m ./scripts/load-test.js > ./scripts/results.json
 
       - name: Upload load testing results
         uses: actions/upload-artifact@v3
