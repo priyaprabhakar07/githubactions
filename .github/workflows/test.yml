@@ -52,6 +52,7 @@ jobs:
       
       - name: Deploying Ingress Service
         run: | 
+          kubectl cluster-info --context kind-kind
           kubectl apply -f ./ingress/ingress.yaml
           kubectl get pods -n ingress-nginx
           kubectl get services -n ingress-nginx
