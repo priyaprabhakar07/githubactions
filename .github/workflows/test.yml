@@ -83,6 +83,7 @@ jobs:
 
       - name: Deploy Ingress manifest
         run: |
+          kubectl delete -A ValidatingWebhookConfiguration ingress-nginx-admission
           kubectl apply -f ingress/ingress.yaml
 
       - name: Check Ingress resources
