@@ -47,8 +47,7 @@ jobs:
           helm repo update
           helm install ingress-nginx ingress-nginx/ingress-nginx --namespace ingress-nginx --create-namespace
           kubectl get svc -n ingress-nginx
-          kubectl get validatingwebhookconfigurations
-          kubectl get mutatingwebhookconfigurations
+          
 
       
       - name: Deploying Foo/Bar Services
@@ -64,6 +63,8 @@ jobs:
       
       - name: Deploying Ingress Service
         run: | 
+          netstat -lan | grep 443
+          telnet ingress-nginx-controller-admission.ingress-nginx.svc 443
           kubectl cluster-info --context kind-kind
           kubectl apply --dry-run=client -f ./ingress/ingress.yaml
 
