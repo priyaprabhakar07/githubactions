@@ -101,3 +101,8 @@ jobs:
         run: |
           kubectl get ingress --all-namespaces
           kubectl describe ingress --all-namespaces
+      - name: Portforwarding
+        run: |
+          kubectl port-forward svc/ingress-nginx-controller -n ingress-nginx 8080:80
+          curl -v http://far.localhost:8080
+          curl -v http://far.localhost:8080
