@@ -107,10 +107,11 @@ jobs:
       #     chmod +x hey_linux_amd64
       #     ./hey_linux_amd64 -z 30s -c 10 http://bar.localhost
       #     ./hey_linux_amd64 -z 30s -c 10 http://foo.localhost
-      - name: Add k6 APT repository
+     
+      - name: Add k6 GPG key
         run: |
-          curl -fsSL https://dl.k6.io/deb/dists/stable/Release.gpg | sudo tee /usr/share/keyrings/k6-archive-keyring.gpg
-          echo "deb [signed-by=/usr/share/keyrings/k6-archive-keyring.gpg] https://dl.k6.io/deb/ stable main" | sudo tee /etc/apt/sources.list.d/k6.list
+          curl -fsSL https://dl.k6.io/deb/dists/stable/Release.gpg  | sudo tee /usr/share/keyrings/k6-archive-keyring.gpg
+          sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys C780D0BDB1A69C86
 
       - name: Install k6
         run: |
