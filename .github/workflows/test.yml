@@ -92,10 +92,17 @@ jobs:
           kubectl port-forward service/foo-service 8080:80 &
           kubectl port-forward service/bar-service 8081:80 &
           sleep 10
-          k6 run --vus 50 --duration 1m ./scripts/load-test.js > ./scripts/results.json
+          k6 run --vus 50 --duration 1m ./scripts/load-test.js --out json=results_foo.json
+          k6 run --vus 50 --duration 1m ./scripts/load-test-bar.js -out json=results_bar.json
 
-      - name: Upload load testing results
+      - name: Upload load testing results Foo
         uses: actions/upload-artifact@v3
         with:
-          name: k6-results
-          path: ./scripts/results.json
+          name: k6-results-foo
+          path: results_foo.json
+      
+      - name: Upload load testing results Bar
+        uses: actions/upload-artifact@v3
+        with:
+          name: k6-results-bar
+          path: results_bar.json
