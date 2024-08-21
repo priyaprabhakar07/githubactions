@@ -101,9 +101,16 @@ jobs:
         run: |
           kubectl get ingress --all-namespaces
           kubectl describe ingress --all-namespaces
-      - name: Generate Load and Capture Results
+      # - name: Generate Load and Capture Results
+      #   run: |
+      #     curl -LO https://github.com/rakyll/hey/releases/download/v0.1.1/hey_linux_amd64
+      #     chmod +x hey_linux_amd64
+      #     ./hey_linux_amd64 -z 30s -c 10 http://bar.localhost
+      #     ./hey_linux_amd64 -z 30s -c 10 http://foo.localhost
+      - name: Install load testing tool (k6)
         run: |
-          curl -LO https://github.com/rakyll/hey/releases/download/v0.1.1/hey_linux_amd64
-          chmod +x hey_linux_amd64
-          ./hey_linux_amd64 -z 30s -c 10 http://bar.localhost
-          ./hey_linux_amd64 -z 30s -c 10 http://foo.localhost
+          curl -s https://dl.k6.io/releases/k6-v0.37.1-linux-amd64.tar.gz | tar xz
+          sudo mv k6-v0.37.1-linux-amd64/k6 /usr/local/bin/
+      - name: Run load test
+        run: |
+          k6 run ./scripts/load-test.js
