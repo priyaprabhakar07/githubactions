@@ -67,7 +67,9 @@ jobs:
         run: kubectl wait --for=condition=Ready node --all --timeout=90s
 
       - name: Set kubectl context
-        run: kubectl cluster-info --context kind-kind
+        run: |
+          kubectl cluster-info --context kind-kind
+          kubectl get validatingwebhookconfigurations 
 
       - name: Deploy Ingress manifest
         run: |
