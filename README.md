@@ -95,3 +95,10 @@ Some folder details:
     -> load-test-bar.js : status check as part of load test for the application bar
     -> load-test.js     : status check as part of load test for the application foo
 ```
+
+#### References:
+https://kind.sigs.k8s.io/
+
+https://github.com/features/actions
+
+Stackoverflow, Technical blogs, google search
