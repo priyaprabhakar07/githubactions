@@ -19,62 +19,62 @@ jobs:
       - name: Set up Docker
         uses: docker/setup-buildx-action@v2
 
-      # - name: Create k8s Kind Cluster
-      #   uses: helm/kind-action@v1
+      - name: Create k8s Kind Cluster
+        uses: helm/kind-action@v1
 
-      # - name: Create Kubernetes Cluster
-      #   run: |
-      #     kind create cluster --config kind-cluster.yaml
-      #     kubectl get nodes
+      - name: Create Kubernetes Cluster
+        run: |
+          kind create cluster --config kind-cluster.yaml
+          kubectl get nodes
 
-      # - name: Set up docker image and load to kind
-      #   run: |
-      #     sh  ./scripts/image.sh
-      #     docker images
-      #     kind load docker-image http-echo:local --name kind            
+      - name: Set up docker image and load to kind
+        run: |
+          sh  ./scripts/image.sh
+          docker images
+          kind load docker-image http-echo:local --name kind            
       
-      # - name: Deploying Nginix Ingress Controller
-      #   run: |
-      #     helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
-      #     helm repo update
-      #     helm install ingress-nginx ingress-nginx/ingress-nginx --namespace ingress-nginx --create-namespace
-      #     kubectl get svc -n ingress-nginx
+      - name: Deploying Nginix Ingress Controller
+        run: |
+          helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+          helm repo update
+          helm install ingress-nginx ingress-nginx/ingress-nginx --namespace ingress-nginx --create-namespace
+          kubectl get svc -n ingress-nginx
           
 
       
-      # - name: Deploying Foo/Bar Services
-      #   run: |
-      #     kubectl apply -f ./deployment/foo-deployment.yaml
-      #     kubectl apply -f ./deployment/bar-deployment.yaml
-      #     kubectl apply -f ./services/foo-service.yaml
-      #     kubectl apply -f ./services/bar-service.yaml
-      #     kubectl rollout status deployment.apps/foo
-      #     kubectl rollout status deployment.apps/bar
-      #     kubectl get pods
-      #     kubectl get svc
+      - name: Deploying Foo/Bar Services
+        run: |
+          kubectl apply -f ./deployment/foo-deployment.yaml
+          kubectl apply -f ./deployment/bar-deployment.yaml
+          kubectl apply -f ./services/foo-service.yaml
+          kubectl apply -f ./services/bar-service.yaml
+          kubectl rollout status deployment.apps/foo
+          kubectl rollout status deployment.apps/bar
+          kubectl get pods
+          kubectl get svc
       
      
 
-      # - name: Deploy Ingress manifest
-      #   run: |
-      #     kubectl delete -A ValidatingWebhookConfiguration ingress-nginx-admission
-      #     kubectl apply -f ingress/ingress.yaml
+      - name: Deploy Ingress manifest
+        run: |
+          kubectl delete -A ValidatingWebhookConfiguration ingress-nginx-admission
+          kubectl apply -f ingress/ingress.yaml
 
-      # - name: Check Ingress resources
-      #   run: |
-      #     kubectl get ingress --all-namespaces
-      #     kubectl describe ingress --all-namespaces
+      - name: Check Ingress resources
+        run: |
+          kubectl get ingress --all-namespaces
+          kubectl describe ingress --all-namespaces
 
-      # - name: Check services
-      #   run: kubectl get svc --all-namespaces
+      - name: Check services
+        run: kubectl get svc --all-namespaces
 
-      # - name: Check Ingress controller pods
-      #   run: kubectl get pods -n kube-system
+      - name: Check Ingress controller pods
+        run: kubectl get pods -n kube-system
 
-      # - name: Verify Ingress deployment
-      #   run: |
-      #     kubectl get ingress --all-namespaces
-      #     kubectl describe ingress --all-namespaces
+      - name: Verify Ingress deployment
+        run: |
+          kubectl get ingress --all-namespaces
+          kubectl describe ingress --all-namespaces
       
      
       - name: Add k6 GPG key
