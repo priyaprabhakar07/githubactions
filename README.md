@@ -76,6 +76,8 @@ priya ~/project/goodnotes/new_repo/githubactions [feature/samplePR] $
 Once port-forwarding is done, we can load the foo and bar sites
 
 <img width="380" alt="Screenshot 2024-08-22 at 1 19 48 AM" src="https://github.com/user-attachments/assets/89967f8c-c720-4525-bcdd-ff222efb3749">
+
+
 <img width="350" alt="Screenshot 2024-08-22 at 1 19 56 AM" src="https://github.com/user-attachments/assets/dc3307e9-2af5-40fd-964d-ac691ce3b579">
 
 ### 3. GithubActions integrations in code and PR result here and code zip uploaded as per instruction
