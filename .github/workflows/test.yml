@@ -89,6 +89,9 @@ jobs:
 
       - name: Run load test
         run: |
+          kubectl port-forward service/foo-service 8080:80 &
+          kubectl port-forward service/bar-service 8081:80 &
+          sleep 10
           k6 run ./scripts/load-test.js
 
       - name: Upload load testing results
