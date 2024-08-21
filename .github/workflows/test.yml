@@ -58,28 +58,28 @@ jobs:
           kubectl get pods
           kubectl get svc
       
-      - name: Deploying Ingress Service
-        run: | 
-          netstat -lan | grep 443
-          telnet ingress-nginx-controller-admission.ingress-nginx.svc 443
-          kubectl cluster-info --context kind-kind
-          kubectl apply --dry-run=client -f ./ingress/ingress.yaml
+      # - name: Deploying Ingress Service
+      #   run: | 
+      #     netstat -lan | grep 443
+      #     telnet ingress-nginx-controller-admission.ingress-nginx.svc 443
+      #     kubectl cluster-info --context kind-kind
+      #     kubectl apply --dry-run=client -f ./ingress/ingress.yaml
 
-      - name: Get API server logs
-        run: |
-          kubectl logs -n kube-system -l component=kube-apiserver
+      # - name: Get API server logs
+      #   run: |
+      #     kubectl logs -n kube-system -l component=kube-apiserver
 
-      - name: Get API server logs
-        run: |
-          kubectl logs -n kube-system -l component=kube-apiserver
+      # - name: Get API server logs
+      #   run: |
+      #     kubectl logs -n kube-system -l component=kube-apiserver
 
-      - name: Wait for cluster to be ready
-        run: kubectl wait --for=condition=Ready node --all --timeout=90s
+      # - name: Wait for cluster to be ready
+      #   run: kubectl wait --for=condition=Ready node --all --timeout=90s
 
-      - name: Set kubectl context
-        run: |
-          kubectl cluster-info --context kind-kind
-          kubectl get validatingwebhookconfigurations 
+      # - name: Set kubectl context
+      #   run: |
+      #     kubectl cluster-info --context kind-kind
+      #     kubectl get validatingwebhookconfigurations 
 
       - name: Deploy Ingress manifest
         run: |
