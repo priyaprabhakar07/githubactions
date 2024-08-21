@@ -53,9 +53,26 @@ jobs:
       - name: Deploying Ingress Service
         run: | 
           kubectl cluster-info --context kind-kind
+          kubectl apply --dry-run=client -f ./ingress/ingress.yaml
+
+      - name: Check Ingress resources
+        run: |
+          kubectl get ingress --all-namespaces
+          kubectl describe ingress --all-namespaces
+
+      - name: Get API server logs
+        run: |
+          kubectl logs -n kube-system -l component=kube-apiserver
+          
+      - name: Deploying Ingress Service
+        run: | 
           kubectl apply -f ./ingress/ingress.yaml
           kubectl get pods -n ingress-nginx
           kubectl get services -n ingress-nginx
+
+      - name: Get API server logs
+        run: |
+          kubectl logs -n kube-system -l component=kube-apiserver
 
       
      
