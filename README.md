@@ -78,3 +78,18 @@ Once port-forwarding is done, we can load the foo and bar sites
 <img width="380" alt="Screenshot 2024-08-22 at 1 19 48 AM" src="https://github.com/user-attachments/assets/89967f8c-c720-4525-bcdd-ff222efb3749">
 <img width="350" alt="Screenshot 2024-08-22 at 1 19 56 AM" src="https://github.com/user-attachments/assets/dc3307e9-2af5-40fd-964d-ac691ce3b579">
 
+### 3. GithubActions integrations in code and PR result here and code zip uploaded as per instruction
+
+
+Some folder details:
+```
+ - .github/actions/test.yml - File where all the task integration happened
+ - deployment/ - deployment files for foo and bar are kept here
+ - services/ - service files for foo and bar are kept here
+ - http-echo/ - Based on the repo : [http-echo](https://github.com/hashicorp/http-echo)
+ - ingress/ - Ingress traffic routing for foo and bar
+ - Scripts/
+    -> image.sh         : to create a docker image from http-echo folder
+    -> load-test-bar.js : status check as part of load test for the application bar
+    -> load-test.js     : status check as part of load test for the application foo
+```
