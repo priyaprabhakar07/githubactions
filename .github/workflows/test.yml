@@ -55,27 +55,36 @@ jobs:
           kubectl cluster-info --context kind-kind
           kubectl apply --dry-run=client -f ./ingress/ingress.yaml
 
+      - name: Get API server logs
+        run: |
+          kubectl logs -n kube-system -l component=kube-apiserver
+
+      - name: Get API server logs
+        run: |
+          kubectl logs -n kube-system -l component=kube-apiserver
+
+      - name: Wait for cluster to be ready
+        run: kubectl wait --for=condition=Ready node --all --timeout=90s
+
+      - name: Set kubectl context
+        run: kubectl cluster-info --context kind-kind
+
+      - name: Deploy Ingress manifest
+        run: |
+          kubectl apply -f ingress/ingress.yaml
+
       - name: Check Ingress resources
         run: |
           kubectl get ingress --all-namespaces
           kubectl describe ingress --all-namespaces
 
-      - name: Get API server logs
+      - name: Check services
+        run: kubectl get svc --all-namespaces
+
+      - name: Check Ingress controller pods
+        run: kubectl get pods -n kube-system
+
+      - name: Verify Ingress deployment
         run: |
-          kubectl logs -n kube-system -l component=kube-apiserver
-          
-      - name: Deploying Ingress Service
-        run: | 
-          kubectl apply -f ./ingress/ingress.yaml
-          kubectl get pods -n ingress-nginx
-          kubectl get services -n ingress-nginx
-
-      - name: Get API server logs
-        run: |
-          kubectl logs -n kube-system -l component=kube-apiserver
-
-      
-     
-
-  
-       
+          kubectl get ingress --all-namespaces
+          kubectl describe ingress --all-namespaces
