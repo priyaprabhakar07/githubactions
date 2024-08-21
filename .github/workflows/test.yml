@@ -110,7 +110,7 @@ jobs:
      
       - name: Add k6 GPG key
         run: |
-          curl -fsSL https://dl.k6.io/deb/dists/stable/Release.gpg  | sudo tee /usr/share/keyrings/k6-archive-keyring.gpg
+          curl -fsSL https://dl.k6.io/key.gpg  | sudo tee /usr/share/keyrings/k6-archive-keyring.gpg
           sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys C780D0BDB1A69C86
 
       - name: Install k6
