@@ -107,10 +107,25 @@ jobs:
       #     chmod +x hey_linux_amd64
       #     ./hey_linux_amd64 -z 30s -c 10 http://bar.localhost
       #     ./hey_linux_amd64 -z 30s -c 10 http://foo.localhost
-      - name: Install load testing tool (k6)
+      - name: Download k6 binary
         run: |
-          curl -s https://dl.k6.io/releases/k6-v0.37.1-linux-amd64.tar.gz | tar xz
+          curl -sL https://dl.k6.io/releases/k6-v0.37.1-linux-amd64.tar.gz -o k6.tar.gz
+
+      - name: Verify file
+        run: |
+          file k6.tar.gz
+
+      - name: Extract k6 binary
+        run: |
+          tar -xzf k6.tar.gz
           sudo mv k6-v0.37.1-linux-amd64/k6 /usr/local/bin/
+
       - name: Run load test
         run: |
           k6 run ./scripts/load-test.js
+
+      - name: Upload load testing results
+        uses: actions/upload-artifact@v3
+        with:
+          name: k6-results
+          path: ./scripts/results.json
