@@ -101,8 +101,9 @@ jobs:
         run: |
           kubectl get ingress --all-namespaces
           kubectl describe ingress --all-namespaces
-      - name: Portforwarding
+      - name: Generate Load and Capture Results
         run: |
-          kubectl port-forward svc/ingress-nginx-controller -n ingress-nginx 8080:80
-          curl -v http://far.localhost:8080
-          curl -v http://far.localhost:8080
+          curl -LO https://github.com/rakyll/hey/releases/download/v0.1.1/hey_linux_amd64
+          chmod +x hey_linux_amd64
+          ./hey_linux_amd64 -z 30s -c 10 http://bar.localhost
+          ./hey_linux_amd64 -z 30s -c 10 http://foo.localhost
