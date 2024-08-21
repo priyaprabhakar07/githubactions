@@ -89,13 +89,13 @@ jobs:
           kubectl port-forward service/foo-service 8080:80 &
           kubectl port-forward service/bar-service 8081:80 &
           sleep 10
-          k6 run --vus 50 --duration 1m ./scripts/load-test.js --out json=results_foo.json
-          k6 run --vus 50 --duration 1m ./scripts/load-test-bar.js --out json=results_bar.json
+          k6 run --vus 50 --duration 1m ./scripts/load-test.js | grep "..." > results_foo.txt
+          k6 run --vus 50 --duration 1m ./scripts/load-test-bar.js | grep "..." > results_bar.txt
 
-      - name: Convert JSON to Plain Text
-        run: |
-          jq -r '.metrics.response_time.values | "p95 response time: \(.p95) ms\np99 response time: \(.p99) ms"' results_foo.json > results_foo.txt
-          jq -r '.metrics.response_time.values | "p95 response time: \(.p95) ms\np99 response time: \(.p99) ms"' results_bar.json > results_bar.txt
+      # - name: Convert JSON to Plain Text
+      #   run: |
+      #     jq -r '.metrics.response_time.values | "p95 response time: \(.p95) ms\np99 response time: \(.p99) ms"' results_foo.json > results_foo.txt
+      #     jq -r '.metrics.response_time.values | "p95 response time: \(.p95) ms\np99 response time: \(.p99) ms"' results_bar.json > results_bar.txt
 
       - name: Upload load testing results Foo
         uses: actions/upload-artifact@v3
