@@ -109,14 +109,13 @@ jobs:
       #     ./hey_linux_amd64 -z 30s -c 10 http://foo.localhost
       - name: Add k6 APT repository
         run: |
-          curl -s https://dl.k6.io/deb/debian.gpg | sudo apt-key add -
-          echo "deb https://dl.k6.io/deb/ stable main" | sudo tee /etc/apt/sources.list.d/k6.list
+          curl -fsSL https://dl.k6.io/deb/debian.gpg | sudo tee /usr/share/keyrings/k6-archive-keyring.gpg
+          echo "deb [signed-by=/usr/share/keyrings/k6-archive-keyring.gpg] https://dl.k6.io/deb/ stable main" | sudo tee /etc/apt/sources.list.d/k6.list
 
       - name: Install k6
         run: |
           sudo apt-get update
           sudo apt-get install -y k6
-
 
       - name: Run load test
         run: |
