@@ -52,40 +52,6 @@ jobs:
       - name: Verifying installation
         run: |
           kubectl get all  --namespace dev
-          kubectl get ingress --all-namespaces
-
-      # - name: Deploying Foo/Bar Services
-      #   run: |
-      #     kubectl apply -f ./deployment/foo-deployment.yaml
-      #     kubectl apply -f ./deployment/bar-deployment.yaml
-      #     kubectl apply -f ./services/foo-service.yaml
-      #     kubectl apply -f ./services/bar-service.yaml
-      #     kubectl rollout status deployment.apps/foo
-      #     kubectl rollout status deployment.apps/bar
-      #     kubectl get pods
-      #     kubectl get svc
-      
-      # - name: Deploy Ingress manifest
-      #   run: |
-      #     kubectl delete -A ValidatingWebhookConfiguration ingress-nginx-admission
-      #     kubectl apply -f ingress/ingress.yaml
-
-      # - name: Check Ingress resources
-      #   run: |
-      #     kubectl get ingress --all-namespaces
-      #     kubectl describe ingress --all-namespaces
-
-      # - name: Check services
-      #   run: kubectl get svc --all-namespaces
-
-      # - name: Check Ingress controller pods
-      #   run: kubectl get pods -n kube-system
-
-      # - name: Verify Ingress deployment
-      #   run: |
-      #     kubectl get ingress --all-namespaces
-      #     kubectl describe ingress --all-namespaces
-      
      
       # - name: Add k6 GPG key
       #   run: |
@@ -101,7 +67,6 @@ jobs:
       #   run: |
       #     kubectl port-forward service/foo-service 8080:80 &
       #     kubectl port-forward service/bar-service 8081:80 &
-      #     sleep 10
       #     k6 run --vus 50 --duration 1m ./scripts/load-test.js | grep "...:" > results_foo.txt
       #     k6 run --vus 50 --duration 1m ./scripts/load-test-bar.js | grep "...:" > results_bar.txt
 
