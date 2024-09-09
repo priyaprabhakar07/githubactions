@@ -43,13 +43,14 @@ jobs:
       
       - name: Installing applications using helm
         run: |
-          kubectl create namespace Dev
-          helm install http-echo-foo ./github-chart --set instanceName=foo --namespace Dev -f github-chart/Values/Dev/values.yaml
+          kubectl create namespace dev
+          kubectl delete -A ValidatingWebhookConfiguration ingress-nginx-admission
+          helm install http-echo-foo ./github-chart --set instanceName=foo --namespace dev -f github-chart/Values/Dev/values.yaml
 
       - name: Verifying installation
         run: |
-          kubectl get pods --namespace Dev
-          kubectl get svc  --namespace Dev
+          kubectl get pods --namespace dev
+          kubectl get svc  --namespace dev
           kubectl get ingress --all-namespaces
 
       # - name: Deploying Foo/Bar Services
