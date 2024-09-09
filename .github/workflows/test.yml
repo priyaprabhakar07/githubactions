@@ -1,9 +1,9 @@
 name: Kind kubernetes Project
 
-on: push
-  # pull_request:
-  # branches:
-  #   - main
+on: 
+    pull_request:
+    branches:
+    - main
 
 jobs:
   build:
@@ -60,7 +60,7 @@ jobs:
           kubectl rollout status deployment.apps/app2-release-bar --namespace dev
           kubectl get all  --namespace dev
           kubectl get ingress --all-namespaces
-          
+
       - name: Add k6 GPG key
         run: |
           wget -qO - https://dl.k6.io/key.gpg  | sudo apt-key add -
