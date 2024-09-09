@@ -43,7 +43,8 @@ jobs:
       
       - name: Installing applications using helm
         run: |
-          helm install http-echo-foo ./github-chart --set instanceName=foo --namespace Dev --create-namespace -f github-chart/Values/Dev/values.yaml
+          kubectl create namespace Dev
+          helm install http-echo-foo ./github-chart --set instanceName=foo --namespace Dev -f github-chart/Values/Dev/values.yaml
 
       - name: Verifying installation
         run: |
