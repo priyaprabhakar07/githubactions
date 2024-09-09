@@ -45,20 +45,19 @@ jobs:
         run: |
           kubectl create namespace dev
           kubectl delete -A ValidatingWebhookConfiguration ingress-nginx-admission
-          helm install foo-release ./github-chart --set instanceName=foo --namespace dev -f github-chart/Values/Dev/values.yaml
-          helm status foo-release --namespace dev
+          helm install app1-release ./github-chart --set instanceName=foo --namespace dev -f github-chart/Values/Dev/values.yaml
+          helm status app1-release --namespace dev
           
 
       - name: Installing applications bar using helm
         run: |
-          helm install bar-release ./github-chart --set instanceName=bar --namespace dev -f github-chart/Values/Dev/values.yaml
-          helm status bar-release --namespace dev
+          helm install app2-release ./github-chart --set instanceName=bar --namespace dev -f github-chart/Values/Dev/values.yaml
+          helm status app2-release --namespace dev
 
       - name: Verifying installation
         run: |
           kubectl rollout status deployment.apps/foo-release-foo --namespace dev
           kubectl rollout status deployment.apps/bar-release-bar --namespace dev
-          kubectl apply -f ingress/ingress.yaml --namespace dev
           kubectl get all  --namespace dev
      
       - name: Add k6 GPG key
