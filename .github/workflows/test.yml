@@ -1,9 +1,9 @@
 name: Kind kubernetes Project
 
-on:
-  pull_request:
-    branches:
-      - main
+on: push
+  # pull_request:
+  # branches:
+  #   - main
 
 jobs:
   build:
@@ -41,80 +41,90 @@ jobs:
           helm install ingress-nginx ingress-nginx/ingress-nginx --namespace ingress-nginx --create-namespace
           kubectl get svc -n ingress-nginx
       
-      - name: Deploying Foo/Bar Services
+      - name: Installing applications using helm
         run: |
-          kubectl apply -f ./deployment/foo-deployment.yaml
-          kubectl apply -f ./deployment/bar-deployment.yaml
-          kubectl apply -f ./services/foo-service.yaml
-          kubectl apply -f ./services/bar-service.yaml
-          kubectl rollout status deployment.apps/foo
-          kubectl rollout status deployment.apps/bar
-          kubectl get pods
-          kubectl get svc
+          helm install http-echo-foo ./github-chart --set instanceName=foo --namespace Dev --create-namespace -f github-chart/Values/Dev/values.yaml
+
+      - name: Verifying installation
+        run: |
+          kubectl get pods --namespace Dev
+          kubectl get svc  --namespace Dev
+          kubectl get ingress --all-namespaces
+
+      # - name: Deploying Foo/Bar Services
+      #   run: |
+      #     kubectl apply -f ./deployment/foo-deployment.yaml
+      #     kubectl apply -f ./deployment/bar-deployment.yaml
+      #     kubectl apply -f ./services/foo-service.yaml
+      #     kubectl apply -f ./services/bar-service.yaml
+      #     kubectl rollout status deployment.apps/foo
+      #     kubectl rollout status deployment.apps/bar
+      #     kubectl get pods
+      #     kubectl get svc
       
-      - name: Deploy Ingress manifest
-        run: |
-          kubectl delete -A ValidatingWebhookConfiguration ingress-nginx-admission
-          kubectl apply -f ingress/ingress.yaml
+      # - name: Deploy Ingress manifest
+      #   run: |
+      #     kubectl delete -A ValidatingWebhookConfiguration ingress-nginx-admission
+      #     kubectl apply -f ingress/ingress.yaml
 
-      - name: Check Ingress resources
-        run: |
-          kubectl get ingress --all-namespaces
-          kubectl describe ingress --all-namespaces
+      # - name: Check Ingress resources
+      #   run: |
+      #     kubectl get ingress --all-namespaces
+      #     kubectl describe ingress --all-namespaces
 
-      - name: Check services
-        run: kubectl get svc --all-namespaces
+      # - name: Check services
+      #   run: kubectl get svc --all-namespaces
 
-      - name: Check Ingress controller pods
-        run: kubectl get pods -n kube-system
+      # - name: Check Ingress controller pods
+      #   run: kubectl get pods -n kube-system
 
-      - name: Verify Ingress deployment
-        run: |
-          kubectl get ingress --all-namespaces
-          kubectl describe ingress --all-namespaces
+      # - name: Verify Ingress deployment
+      #   run: |
+      #     kubectl get ingress --all-namespaces
+      #     kubectl describe ingress --all-namespaces
       
      
-      - name: Add k6 GPG key
-        run: |
-          wget -qO - https://dl.k6.io/key.gpg  | sudo apt-key add -
-          echo "deb [arch=amd64] https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
+      # - name: Add k6 GPG key
+      #   run: |
+      #     wget -qO - https://dl.k6.io/key.gpg  | sudo apt-key add -
+      #     echo "deb [arch=amd64] https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
          
-      - name: Install k6
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y k6 jq
+      # - name: Install k6
+      #   run: |
+      #     sudo apt-get update
+      #     sudo apt-get install -y k6 jq
 
-      - name: Run load test
-        run: |
-          kubectl port-forward service/foo-service 8080:80 &
-          kubectl port-forward service/bar-service 8081:80 &
-          sleep 10
-          k6 run --vus 50 --duration 1m ./scripts/load-test.js | grep "...:" > results_foo.txt
-          k6 run --vus 50 --duration 1m ./scripts/load-test-bar.js | grep "...:" > results_bar.txt
+      # - name: Run load test
+      #   run: |
+      #     kubectl port-forward service/foo-service 8080:80 &
+      #     kubectl port-forward service/bar-service 8081:80 &
+      #     sleep 10
+      #     k6 run --vus 50 --duration 1m ./scripts/load-test.js | grep "...:" > results_foo.txt
+      #     k6 run --vus 50 --duration 1m ./scripts/load-test-bar.js | grep "...:" > results_bar.txt
 
-      - name: Upload load testing results Foo
-        uses: actions/upload-artifact@v3
-        with:
-          name: k6-results-foo
-          path: results_foo.txt
+      # - name: Upload load testing results Foo
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: k6-results-foo
+      #     path: results_foo.txt
       
-      - name: Upload load testing results Bar
-        uses: actions/upload-artifact@v3
-        with:
-          name: k6-results-bar
-          path: results_bar.txt
+      # - name: Upload load testing results Bar
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: k6-results-bar
+      #     path: results_bar.txt
 
-      - name: Post Load Test Results to PR
-        uses: actions/github-script@v6
-        with:
-          script: |
-            const fs = require('fs');
-            const resultsBar = fs.readFileSync('results_bar.txt', 'utf8');
-            const resultsFoo = fs.readFileSync('results_foo.txt', 'utf8');
-            const commentBody = `**Load Test Results**\n\n**Bar Deployment**\n${resultsBar}\n\n**Foo Deployment**\n${resultsFoo}`;
-            await github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: commentBody
-            });
+      # - name: Post Load Test Results to PR
+      #   uses: actions/github-script@v6
+      #   with:
+      #     script: |
+      #       const fs = require('fs');
+      #       const resultsBar = fs.readFileSync('results_bar.txt', 'utf8');
+      #       const resultsFoo = fs.readFileSync('results_foo.txt', 'utf8');
+      #       const commentBody = `**Load Test Results**\n\n**Bar Deployment**\n${resultsBar}\n\n**Foo Deployment**\n${resultsFoo}`;
+      #       await github.rest.issues.createComment({
+      #         issue_number: context.issue.number,
+      #         owner: context.repo.owner,
+      #         repo: context.repo.repo,
+      #         body: commentBody
+      #       });
