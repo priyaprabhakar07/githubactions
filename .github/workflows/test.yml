@@ -61,46 +61,53 @@ jobs:
           kubectl apply -f ingress/ingress.yaml --namespace dev
           kubectl get all  --namespace dev
      
-      # - name: Add k6 GPG key
-      #   run: |
-      #     wget -qO - https://dl.k6.io/key.gpg  | sudo apt-key add -
-      #     echo "deb [arch=amd64] https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
+      - name: Add k6 GPG key
+        run: |
+          wget -qO - https://dl.k6.io/key.gpg  | sudo apt-key add -
+          echo "deb [arch=amd64] https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
          
-      # - name: Install k6
-      #   run: |
-      #     sudo apt-get update
-      #     sudo apt-get install -y k6 jq
-
-      # - name: Run load test
-      #   run: |
-      #     kubectl port-forward service/foo-service 8080:80 &
-      #     kubectl port-forward service/bar-service 8081:80 &
-      #     k6 run --vus 50 --duration 1m ./scripts/load-test.js | grep "...:" > results_foo.txt
-      #     k6 run --vus 50 --duration 1m ./scripts/load-test-bar.js | grep "...:" > results_bar.txt
-
-      # - name: Upload load testing results Foo
-      #   uses: actions/upload-artifact@v3
-      #   with:
-      #     name: k6-results-foo
-      #     path: results_foo.txt
+      - name: Install k6
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y k6 jq
       
-      # - name: Upload load testing results Bar
-      #   uses: actions/upload-artifact@v3
-      #   with:
-      #     name: k6-results-bar
-      #     path: results_bar.txt
+      - name: Enabling Port forwarding
+        run: |
+          kubectl port-forward service/service/foo-release-foo 8080:80 &
+          kubectl port-forward service/bar-release-bar 8081:80 &
 
-      # - name: Post Load Test Results to PR
-      #   uses: actions/github-script@v6
-      #   with:
-      #     script: |
-      #       const fs = require('fs');
-      #       const resultsBar = fs.readFileSync('results_bar.txt', 'utf8');
-      #       const resultsFoo = fs.readFileSync('results_foo.txt', 'utf8');
-      #       const commentBody = `**Load Test Results**\n\n**Bar Deployment**\n${resultsBar}\n\n**Foo Deployment**\n${resultsFoo}`;
-      #       await github.rest.issues.createComment({
-      #         issue_number: context.issue.number,
-      #         owner: context.repo.owner,
-      #         repo: context.repo.repo,
-      #         body: commentBody
-      #       });
+      - name: Service Sanity Check
+        run: |
+          sh  ./scripts/check_service_status.sh
+
+      - name: Run load test
+        run: |
+          k6 run --vus 50 --duration 1m ./scripts/load-test.js | grep "...:" > results_foo.txt
+          k6 run --vus 50 --duration 1m ./scripts/load-test-bar.js | grep "...:" > results_bar.txt
+
+      - name: Upload load testing results Foo
+        uses: actions/upload-artifact@v3
+        with:
+          name: k6-results-foo
+          path: results_foo.txt
+      
+      - name: Upload load testing results Bar
+        uses: actions/upload-artifact@v3
+        with:
+          name: k6-results-bar
+          path: results_bar.txt
+
+      - name: Post Load Test Results to PR
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const fs = require('fs');
+            const resultsBar = fs.readFileSync('results_bar.txt', 'utf8');
+            const resultsFoo = fs.readFileSync('results_foo.txt', 'utf8');
+            const commentBody = `**Load Test Results**\n\n**Bar Deployment**\n${resultsBar}\n\n**Foo Deployment**\n${resultsFoo}`;
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: commentBody
+            });
