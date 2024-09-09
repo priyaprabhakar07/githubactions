@@ -1,5 +1,12 @@
 ## Project on Kubernetes, github actions and load testing
 
+## Latest updates
+
+- Templates used for application and implemented using helm
+- sanity checks added
+- Added load test for whole system
+- Removed usage of sleep
+
 ## How I approached the task:
 1. Tested http-echo setup in Docker locally
    
