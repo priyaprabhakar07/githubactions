@@ -59,7 +59,8 @@ jobs:
           kubectl rollout status deployment.apps/app1-release-foo --namespace dev
           kubectl rollout status deployment.apps/app2-release-bar --namespace dev
           kubectl get all  --namespace dev
-     
+          kubectl get ingress --all-namespaces
+          
       - name: Add k6 GPG key
         run: |
           wget -qO - https://dl.k6.io/key.gpg  | sudo apt-key add -
@@ -72,8 +73,8 @@ jobs:
       
       - name: Enabling Port forwarding
         run: |
-          kubectl port-forward service/foo-release-foo 8080:80 --namespace dev &
-          kubectl port-forward service/bar-release-bar 8081:80 --namespace dev &
+          kubectl port-forward service/app1-release-foo 8080:80 --namespace dev &
+          kubectl port-forward service/app2-release-bar 8081:80 --namespace dev &
 
       - name: Service Sanity Check
         run: |
