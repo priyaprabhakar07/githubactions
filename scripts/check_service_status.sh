@@ -28,7 +28,6 @@ while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
   SERVICE_URL="http://foo.localhost:8080"
   if check_status; then
     echo "Foo Service Sanity completed successfully"
-    exit 0
   else
     echo "Retrying Foo Service in $WAIT_INTERVAL seconds..."
     sleep $WAIT_INTERVAL
