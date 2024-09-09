@@ -83,28 +83,21 @@ jobs:
       - name: Run load test
         run: |
           k6 run --vus 50 --duration 1m ./scripts/load-test.js | grep "...:" > results_foo.txt
-          k6 run --vus 50 --duration 1m ./scripts/load-test-bar.js | grep "...:" > results_bar.txt
 
-      - name: Upload load testing results Foo
+      - name: Upload load testing results
         uses: actions/upload-artifact@v3
         with:
           name: k6-results-foo
           path: results_foo.txt
-      
-      - name: Upload load testing results Bar
-        uses: actions/upload-artifact@v3
-        with:
-          name: k6-results-bar
-          path: results_bar.txt
+    
 
       - name: Post Load Test Results to PR
         uses: actions/github-script@v6
         with:
           script: |
             const fs = require('fs');
-            const resultsBar = fs.readFileSync('results_bar.txt', 'utf8');
             const resultsFoo = fs.readFileSync('results_foo.txt', 'utf8');
-            const commentBody = `**Load Test Results**\n\n**Bar Deployment**\n${resultsBar}\n\n**Foo Deployment**\n${resultsFoo}`;
+            const commentBody = `**Load Test Results**\n\n**Service Deployment**\n${resultsFoo}`;
             await github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
