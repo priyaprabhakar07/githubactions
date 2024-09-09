@@ -5,7 +5,7 @@
 WAIT_INTERVAL=5
 
 # Maximum number of retries
-MAX_RETRIES=60
+MAX_RETRIES=3
 
 # Counter for retries
 RETRY_COUNT=0
@@ -35,6 +35,8 @@ while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
     RETRY_COUNT=$((RETRY_COUNT + 1))
   fi
 done
+
+RETRY_COUNT=0
 
 # Wait for the bar service to be available
 while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do

@@ -73,7 +73,7 @@ jobs:
       
       - name: Enabling Port forwarding
         run: |
-          kubectl port-forward service/service/foo-release-foo 8080:80 &
+          kubectl port-forward service/foo-release-foo 8080:80 &
           kubectl port-forward service/bar-release-bar 8081:80 &
 
       - name: Service Sanity Check
