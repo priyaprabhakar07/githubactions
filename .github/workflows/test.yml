@@ -56,8 +56,8 @@ jobs:
 
       - name: Verifying installation
         run: |
-          kubectl rollout status deployment.apps/foo-release-foo --namespace dev
-          kubectl rollout status deployment.apps/bar-release-bar --namespace dev
+          kubectl rollout status deployment.apps/app1-release-foo --namespace dev
+          kubectl rollout status deployment.apps/app2-release-bar --namespace dev
           kubectl get all  --namespace dev
      
       - name: Add k6 GPG key
